@@ -9,7 +9,7 @@
     "test": "jest",
     "build-client": "tsc ./src/client/foursquare",
     "dev": "npm run build-client && parcel index.html",
-    "prod": "npm run lint && npm run build-client && parcel build index.html"
+    "prod": "npm run build-client && npm run lint && parcel build index.html"
   },
   "keywords": [],
   "author": "",
