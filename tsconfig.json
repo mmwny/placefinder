@@ -1,13 +1,9 @@
 {
   "compilerOptions": {
+    "outDir": "src/client",
     "module": "commonjs",
     "target": "es2017",
-    "sourceMap": true,
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "files": [
-    "src/client/foursquare.ts"
-  ]
+  "files": ["Client/foursquare.ts"]
 }

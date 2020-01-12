@@ -10,7 +10,10 @@ const apiParams = {
   v: '20200112',
 };
 
-const createUrlwithParams = (url: string, options: { [key: string]: any }): string => {
+const createUrlwithParams: (url: string, options: { [key: string]: any }) => string = (
+  url: string,
+  options: { [key: string]: any }
+): string => {
   const params: string = new URLSearchParams({ ...apiParams, ...options }).toString();
   return `${url}?${params}`;
 };
@@ -19,7 +22,9 @@ const createUrlwithParams = (url: string, options: { [key: string]: any }): stri
  * Call to retrieve places of interest based on the options provided
  * @param {LocationOptions} options the query parameters for the API, can pass a longitude and latitude, city name, radius, or a searchterm
  */
-export const getLocations = (options: LocationOptions): Observable<VenueResponse> => {
+export const getLocations: (options: LocationOptions) => Observable<VenueResponse> = (
+  options: LocationOptions
+): Observable<VenueResponse> => {
   const url: string = createUrlwithParams(baseUrl, options);
   return fromFetch(url).pipe(
     switchMap(response => response.json()),

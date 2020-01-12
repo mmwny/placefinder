@@ -7,7 +7,7 @@
     "format": "prettier \"src/**/*.{js,ts,html}\" --write",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "test": "jest",
-    "build-client": "tsc ./src/client/foursquare",
+    "build-client": "tsc",
     "dev": "npm run build-client && parcel index.html",
     "prod": "npm run build-client && npm run lint && parcel build index.html"
   },
