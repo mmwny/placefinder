@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier \"src/**/*.{js,ts,html}\" --write",
-    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --quiet",
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "test": "jest",
     "build-client": "tsc ./src/client/foursquare",
     "dev": "npm run build-client && parcel index.html",
-    "prod": "npm run lint && npm run test && npm run build-client && parcel build index.html"
+    "prod": "npm run lint && npm run build-client && parcel build index.html"
   },
   "keywords": [],
   "author": "",
