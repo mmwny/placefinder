@@ -13,7 +13,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var fetch_1 = require("rxjs/fetch");
 var operators_1 = require("rxjs/operators");
-var baseUrl = 'https://api.foursquare.com/v2/venues';
+var baseUrl = 'https://api.foursquare.com/v2/venues/search';
 var apiParams = {
     client_id: process.env.CLIENT_KEY,
     client_secret: process.env.SECRET_KEY,
@@ -28,14 +28,6 @@ var createUrlwithParams = function (url, options) {
  * @param {LocationOptions} options the query parameters for the API, can pass a longitude and latitude, city name, radius, or a searchterm
  */
 exports.getLocations = function (options) {
-    var url = createUrlwithParams(baseUrl + "/search", options);
-    return fetch_1.fromFetch(url).pipe(operators_1.switchMap(function (response) { return response.json(); }), operators_1.catchError(function (err) { return err; }));
-};
-/**
- * Call to retrieve the details for a single place of interest
- * @param { id: string } options the id of the venue to fetch details from
- */
-exports.getDetails = function (options) {
     var url = createUrlwithParams(baseUrl, options);
     return fetch_1.fromFetch(url).pipe(operators_1.switchMap(function (response) { return response.json(); }), operators_1.catchError(function (err) { return err; }));
 };

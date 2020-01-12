@@ -8,6 +8,6 @@
     ]
   },
   "files": [
-    "./src/client/Foursquare.ts"
+    "src/client/foursquare.ts"
   ]
 }
