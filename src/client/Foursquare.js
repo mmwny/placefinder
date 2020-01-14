@@ -14,9 +14,13 @@ const createUrlwithParams = (url, options) => {
 };
 /**
  * Call to retrieve places of interest based on the options provided
- * @param {LocationOptions} options the query parameters for the API, can pass a longitude and latitude, city name, radius, or a searchterm
+ * @param {LocationOptions} options the query parameters for the API, can pass a longitude and latitude, city name, or a searchterm
  */
-exports.getLocations = (options) => {
+const getLocations = (options) => {
     const url = createUrlwithParams(baseUrl, options);
     return fetch_1.fromFetch(url).pipe(operators_1.switchMap(response => response.json()), operators_1.catchError(err => err));
 };
+const foursquare = {
+    getLocations
+};
+exports.default = foursquare;

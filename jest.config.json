@@ -1,0 +1,21 @@
+{
+  "testRegex": "((\\.|/*.)(spec))\\.js?$",
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.{js,jsx}",
+    "!<rootDir>/src/App.js",
+    "!**/node_modules/**",
+    "!**/coverage/**",
+    "!**/__tests__/**",
+    "!**/src/client/**"
+  ],
+  "coverageReporters": [
+    "json",
+    "lcovonly",
+    "text",
+    "clover"
+  ],
+  "setupFilesAfterEnv": [
+    "<rootDir>/setupTest.js"
+  ]
+}

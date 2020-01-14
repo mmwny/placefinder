@@ -6,10 +6,10 @@
   "scripts": {
     "format": "prettier \"src/**/*.{js,ts,html}\" --write",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
-    "test": "jest",
     "build-client": "tsc",
+    "test": "jest --coverage --config ./jest.config.json",
     "dev": "npm run build-client && parcel index.html",
-    "prod": "npm run build-client && npm run lint && parcel build index.html"
+    "prod": "npm run build-client && npm run test && npm run lint && parcel build index.html"
   },
   "keywords": [],
   "author": "",
@@ -23,9 +23,17 @@
     "rxjs": "^6.5.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.2",
+    "@babel/preset-react": "^7.8.0",
+    "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
+    "@types/jest": "^24.0.25",
     "@types/node": "^13.1.6",
     "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-import": "^2.20.0",
@@ -34,6 +42,7 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "react-test-renderer": "^16.12.0",
     "typescript": "^3.7.4"
   }
 }

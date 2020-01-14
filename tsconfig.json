@@ -3,7 +3,14 @@
     "outDir": "src/client",
     "module": "commonjs",
     "target": "es2017",
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "files": ["Client/foursquare.ts"]
+  "files": [
+    "foursquare-client/foursquare.ts"
+  ],
+  "exclude": [
+    "foursquare-client/types.ts"
+  ]
 }

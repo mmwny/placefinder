@@ -39,7 +39,7 @@ const Input = props => {
           name={props.label}
           className={classes.input}
           placeholder={props.placeholder}
-          value={props.value}
+          defaultValue={props.value}
           onChange={props.onChange}
         ></input>
       </label>

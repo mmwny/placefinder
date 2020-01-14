@@ -13,6 +13,14 @@ const App = () => {
   const [venues, setVenues] = useState([]);
   const [fullAddress, setFullAddress] = useState('');
 
+  const handleSetVenues = (event) => {
+    setVenues(event);
+  }
+
+  const handleSetFullAddress = (event) => {
+    setFullAddress(event);
+  }
+
   const styles = {
     '@global': {
       html: {
@@ -39,7 +47,7 @@ const App = () => {
     <React.StrictMode>
       <VenueContext.Provider value={{ venues, address: fullAddress }}>
         <div>
-          <Header onSearch={setVenues} onResult={setFullAddress} />
+          <Header onSearch={handleSetVenues} onResult={handleSetFullAddress} />
           <Places />
         </div>
       </VenueContext.Provider >
@@ -47,4 +55,8 @@ const App = () => {
   );
 };
 
-render(<App />, document.getElementById('root'));
+if (document.getElementById('root')) {
+  render(<App />, document.getElementById('root'));
+}
+
+export default App;
