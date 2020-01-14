@@ -10,8 +10,8 @@ const Input = props => {
       width: '100%',
       '& p': {
         fontSize: '12px',
-        margin: '0'
-      }
+        margin: '0',
+      },
     },
     input: {
       display: 'block',
@@ -39,7 +39,7 @@ const Input = props => {
           name={props.label}
           className={classes.input}
           placeholder={props.placeholder}
-          defaultValue={props.value}
+          value={props.value}
           onChange={props.onChange}
         ></input>
       </label>
