@@ -25,7 +25,7 @@ const Header = props => {
 
     // When the user is typing if the location is more than 3 letters, look for places
     if (location.length > 3) {
-      handleSearchForLocation(false);
+      handleSearchForLocation(null);
     }
 
     return () => {
@@ -37,7 +37,7 @@ const Header = props => {
   const styles = {
     sidebarContainer: {
       backgroundColor: '#7e6690',
-      padding: '15px'
+      padding: '15px',
     },
     formContainer: {
       display: 'grid',
@@ -64,8 +64,8 @@ const Header = props => {
         cursor: 'not-allowed',
         boxShadow: 'none',
         color: 'grey',
-        backgroundColor: 'lightgrey'
-      }
+        backgroundColor: 'lightgrey',
+      },
     },
     latLng: {
       color: 'lightgrey',
@@ -77,9 +77,9 @@ const Header = props => {
     },
     '@media (max-width: 550px)': {
       formContainer: {
-        gridTemplateColumns: 'auto auto'
-      }
-    }
+        gridTemplateColumns: 'auto auto',
+      },
+    },
   };
 
   const { classes } = jss.createStyleSheet(styles).attach();
@@ -89,7 +89,7 @@ const Header = props => {
     setLocation('');
     setQuery('');
     props.onResult('');
-  }
+  };
 
   const handleSetLocation = event => {
     setLocation(event.target.value);
@@ -99,7 +99,7 @@ const Header = props => {
     setQuery(event.target.value);
   };
 
-  const handleSearchForLocation = (event) => {
+  const handleSearchForLocation = event => {
     if (event) {
       event.preventDefault();
     }
@@ -111,7 +111,9 @@ const Header = props => {
           next: res => {
             if (res.response.venues) {
               // Take lat/lng from Foursquare api and use to set latLng, as well as use full address
-              setLatLng(`${res.response.geocode.feature.geometry.center.lat},${res.response.geocode.feature.geometry.center.lng}`);
+              setLatLng(
+                `${res.response.geocode.feature.geometry.center.lat},${res.response.geocode.feature.geometry.center.lng}`
+              );
               props.onResult(res.response.geocode.feature.displayName);
               props.onSearch(res.response.venues);
             } else {
@@ -121,7 +123,7 @@ const Header = props => {
               props.onSearch([]);
             }
           },
-          complete: () => setLoading(false)
+          complete: () => setLoading(false),
         })
       );
     }
@@ -134,33 +136,38 @@ const Header = props => {
     return new Observable(obs => {
       navigator.geolocation.getCurrentPosition(
         result => {
-          obs.next(result),
-            obs.complete()
+          obs.next(result), obs.complete();
         },
         error => {
-          obs.error(error)
+          obs.error(error);
         }
-      )
-    })
-  }
+      );
+    });
+  };
 
   const handleUseCurrentLocation = () => {
     if (navigator.geolocation) {
       setLoading(true);
       // Get location coordinates from geolocation api, set to state, then pass to Foursquare client to retrieve locations and set to context.
       subscriptions.add(
-        getLocationObservable().pipe(
-          tap(location => setLatLng(`${location.coords.latitude},${location.coords.longitude}`)),
-          concatMap(location => foursquare.getLocations({ ll: `${location.coords.latitude},${location.coords.longitude}` }))
-        ).subscribe({
-          next: res => props.onSearch(res.response.venues),
-          complete: () => setLoading(false)
-        })
+        getLocationObservable()
+          .pipe(
+            tap(location => setLatLng(`${location.coords.latitude},${location.coords.longitude}`)),
+            concatMap(location =>
+              foursquare.getLocations({
+                ll: `${location.coords.latitude},${location.coords.longitude}`,
+              })
+            )
+          )
+          .subscribe({
+            next: res => props.onSearch(res.response.venues),
+            complete: () => setLoading(false),
+          })
       );
       // reset the manual search form fields
       resetParameters();
     }
-  }
+  };
 
   return (
     <div className={classes.sidebarContainer}>
@@ -186,18 +193,18 @@ const Header = props => {
           data-testid="form-submit"
           disabled={loading}
         />
-        <button
-          className={classes.button}
-          onClick={handleUseCurrentLocation}
-          disabled={loading}
-        >
+        <button className={classes.button} onClick={handleUseCurrentLocation} disabled={loading}>
           Current Location
         </button>
       </form>
 
       <div>
         <div className={classes.latLng}>
-          {navigator.geolocation ? <p>Current Location Latitude & Longitude: {latLng}</p> : <p>Geolocation not available</p>}
+          {navigator.geolocation ? (
+            <p>Current Location Latitude & Longitude: {latLng}</p>
+          ) : (
+            <p>Geolocation not available</p>
+          )}
         </div>
       </div>
     </div>
