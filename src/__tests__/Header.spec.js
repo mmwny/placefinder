@@ -17,23 +17,23 @@ foursquare.getLocations = jest.fn().mockImplementation(() => {
       venues: [
         {
           id: 'p123',
-          name: "Place",
+          name: 'Place',
           location: {
             address: '123 Street',
             city: 'Toronto',
-            state: 'CA'
-          }
+            state: 'CA',
+          },
         },
       ],
       geocode: {
         feature: {
           geometry: {
-            center: { lat: 123, lng: -124 }
+            center: { lat: 123, lng: -124 },
           },
-          displayName: 'Name to display'
-        }
-      }
-    }
+          displayName: 'Name to display',
+        },
+      },
+    },
   });
 });
 
@@ -43,16 +43,20 @@ const changeHandler = jest.fn().mockImplementation(() => {
 
 const props = {
   onSearch: changeHandler,
-  onResult: changeHandler
+  onResult: changeHandler,
 };
 
 const mockGeolocation = {
-  getCurrentPosition: jest.fn().mockImplementationOnce((success) => Promise.resolve(success({
-    coords: {
-      latitude: 51.1,
-      longitude: 45.3
-    }
-  })))
+  getCurrentPosition: jest.fn().mockImplementationOnce(success =>
+    Promise.resolve(
+      success({
+        coords: {
+          latitude: 51.1,
+          longitude: 45.3,
+        },
+      })
+    )
+  ),
 };
 global.navigator.geolocation = mockGeolocation;
 
@@ -66,11 +70,10 @@ test('HeaderComponent click to call handleUseCurrentLocation and use geolocation
 });
 
 test('HeaderComponent UI Test', () => {
-  const { getByText, getByDisplayValue, getByPlaceholderText } = render(<Header {...props} />);
+  const { getByText, getByPlaceholderText } = render(<Header {...props} />);
 
   expect(getByPlaceholderText('Search for a place...')).toBeInTheDocument();
   expect(getByPlaceholderText('What do you want to find?')).toBeInTheDocument();
-  expect(getByDisplayValue('Search')).toBeInTheDocument();
   expect(getByText('Current Location')).toBeInTheDocument();
   expect(getByText('Current Location Latitude & Longitude:')).toBeInTheDocument();
 });
@@ -102,7 +105,7 @@ test('HeaderComponent setQuery and call api', () => {
 });
 
 test('HeaderComponent setLocation and call api', () => {
-  const { getByPlaceholderText, getByText, getByTestId } = render(<App />);
+  const { getByPlaceholderText, getByText } = render(<App />);
 
   const input = getByPlaceholderText('Search for a place...');
   fireEvent.change(input, { target: { value: 'Kitchener' } });
@@ -111,18 +114,13 @@ test('HeaderComponent setLocation and call api', () => {
   expect(foursquare.getLocations).toHaveBeenCalledWith({ near: 'Kitchener', query: '' });
   expect(getByText('Currently viewing for Name to display')).toBeInTheDocument();
   expect(getByText('Place')).toBeInTheDocument();
-
-  fireEvent.submit(getByTestId('form-submit'));
-
-  expect(getByText('Currently viewing for Name to display')).toBeInTheDocument();
-  expect(getByText('Place')).toBeInTheDocument();
 });
 
 test('HeaderComponent setLocation and call api receive no results', () => {
   const { getByPlaceholderText, queryByText } = render(<App />);
 
   foursquare.getLocations = jest.fn().mockImplementationOnce(() => {
-    return of({ meta: {}, response: {} })
+    return of({ meta: {}, response: {} });
   });
 
   const input = getByPlaceholderText('Search for a place...');
@@ -132,4 +130,70 @@ test('HeaderComponent setLocation and call api receive no results', () => {
   expect(foursquare.getLocations).toHaveBeenCalledWith({ near: 'Kitchener', query: '' });
   expect(queryByText('Currently viewing for Name to display')).not.toBeInTheDocument();
   expect(queryByText('Place')).not.toBeInTheDocument();
+});
+
+test('HeaderComponent snapshot', () => {
+  const { container } = render(<Header {...props} />);
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div
+      class="sidebarContainer-0-0-275"
+    >
+      <form
+        class="formContainer-0-0-276"
+      >
+        <div>
+          <label
+            class="label-0-0-279"
+            for="Location (City, State)"
+          >
+            <p>
+              Location (City, State)
+            </p>
+            <input
+              class="input-0-0-280"
+              id="input-location(city, state)"
+              name="Location (City, State)"
+              placeholder="Search for a place..."
+              type="text"
+              value=""
+            />
+          </label>
+        </div>
+        <div>
+          <label
+            class="label-0-0-281"
+            for="Search"
+          >
+            <p>
+              Search
+            </p>
+            <input
+              class="input-0-0-282"
+              id="input-search"
+              name="Search"
+              placeholder="What do you want to find?"
+              type="text"
+              value=""
+            />
+          </label>
+        </div>
+        <button
+          class="button-0-0-277"
+          disabled=""
+        >
+          Current Location
+        </button>
+      </form>
+      <div>
+        <div
+          class="latLng-0-0-278"
+        >
+          <p>
+            Current Location Latitude & Longitude: 
+            
+          </p>
+        </div>
+      </div>
+    </div>
+  `);
 });

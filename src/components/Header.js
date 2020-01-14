@@ -41,7 +41,7 @@ const Header = props => {
     },
     formContainer: {
       display: 'grid',
-      gridTemplateColumns: 'auto auto 120px 120px',
+      gridTemplateColumns: 'auto auto 150px',
       gridGap: '10px',
       alignItems: 'flex-end',
       marginBottom: '10px',
@@ -78,6 +78,10 @@ const Header = props => {
     '@media (max-width: 550px)': {
       formContainer: {
         gridTemplateColumns: 'auto auto',
+      },
+      button: {
+        gridColumnStart: '1',
+        gridColumnEnd: 'span 2',
       },
     },
   };
@@ -136,7 +140,8 @@ const Header = props => {
     return new Observable(obs => {
       navigator.geolocation.getCurrentPosition(
         result => {
-          obs.next(result), obs.complete();
+          obs.next(result);
+          obs.complete();
         },
         error => {
           obs.error(error);
@@ -161,11 +166,13 @@ const Header = props => {
           )
           .subscribe({
             next: res => props.onSearch(res.response.venues),
-            complete: () => setLoading(false),
+            complete: () => {
+              setLoading(false);
+              // reset search form fields
+              resetParameters();
+            },
           })
       );
-      // reset the manual search form fields
-      resetParameters();
     }
   };
 
@@ -185,13 +192,6 @@ const Header = props => {
           placeholder="What do you want to find?"
           value={query}
           onChange={handleSetQuery}
-        />
-        <input
-          className={classes.button}
-          type="submit"
-          value="Search"
-          data-testid="form-submit"
-          disabled={loading}
         />
         <button className={classes.button} onClick={handleUseCurrentLocation} disabled={loading}>
           Current Location
