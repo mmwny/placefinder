@@ -5,14 +5,14 @@ import { Subscription, Observable } from 'rxjs';
 import { tap, concatMap } from 'rxjs/operators';
 
 import Input from '../controls/Input';
-import { getLocations } from '../client/foursquare';
+import foursquare from '../client/foursquare';
 
 const Header = props => {
+  const [initialLoad, setInitialLoad] = useState(true);
   const [loading, setLoading] = useState(false);
   const [latLng, setLatLng] = useState('');
   const [location, setLocation] = useState('');
   const [query, setQuery] = useState('');
-  const [initialLoad, setInitialLoad] = useState(true);
 
   const subscriptions = new Subscription();
 
@@ -25,7 +25,7 @@ const Header = props => {
 
     // When the user is typing if the location is more than 3 letters, look for places
     if (location.length > 3) {
-      handleSearchForLocation(null);
+      handleSearchForLocation(false);
     }
 
     return () => {
@@ -35,10 +35,10 @@ const Header = props => {
   }, [location, query]);
 
   const styles = {
-    sidebarContainer: `
-      background-color: #7e6690;
-      padding: 15px;
-    `,
+    sidebarContainer: {
+      backgroundColor: '#7e6690',
+      padding: '15px'
+    },
     formContainer: {
       display: 'grid',
       gridTemplateColumns: 'auto auto 120px 120px',
@@ -84,6 +84,7 @@ const Header = props => {
 
   const { classes } = jss.createStyleSheet(styles).attach();
 
+  // Reset the location and query input, as well as address in context when using geolocation
   const resetParameters = () => {
     setLocation('');
     setQuery('');
@@ -106,7 +107,7 @@ const Header = props => {
     if (location) {
       setLoading(true);
       subscriptions.add(
-        getLocations({ near: location, query }).subscribe({
+        foursquare.getLocations({ near: location, query }).subscribe({
           next: res => {
             if (res.response.venues) {
               // Take lat/lng from Foursquare api and use to set latLng, as well as use full address
@@ -150,7 +151,7 @@ const Header = props => {
       subscriptions.add(
         getLocationObservable().pipe(
           tap(location => setLatLng(`${location.coords.latitude},${location.coords.longitude}`)),
-          concatMap(location => getLocations({ ll: `${location.coords.latitude},${location.coords.longitude}` }))
+          concatMap(location => foursquare.getLocations({ ll: `${location.coords.latitude},${location.coords.longitude}` }))
         ).subscribe({
           next: res => props.onSearch(res.response.venues),
           complete: () => setLoading(false)
@@ -182,6 +183,7 @@ const Header = props => {
           className={classes.button}
           type="submit"
           value="Search"
+          data-testid="form-submit"
           disabled={loading}
         />
         <button
@@ -198,7 +200,6 @@ const Header = props => {
           {navigator.geolocation ? <p>Current Location Latitude & Longitude: {latLng}</p> : <p>Geolocation not available</p>}
         </div>
       </div>
-
     </div>
   );
 };
